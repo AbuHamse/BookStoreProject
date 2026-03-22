@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { getRandomAge,getRandomCompany, randomGender } from '../utils/utils.js'
 
 const companies = [
     'Tile Books Inc', 
@@ -13,9 +14,8 @@ const companies = [
 
 ]
 
-function getRandomCompany(){
-            return companies[Math.floor(Math.random() * companies.length)]
-        }
+
+
 
 const AuthorSchema = mongoose.Schema({
     firstName:{
@@ -23,7 +23,7 @@ const AuthorSchema = mongoose.Schema({
         required:true,
         trim:true,
         minlength:4,
-        maxlength:20
+        maxlength:50
     },
 
     lastName:{
@@ -31,30 +31,41 @@ const AuthorSchema = mongoose.Schema({
         required:true,
         trim:true,
         minlength:4,
-        maxlength:20
+        maxlength:50
     },
     age:{
         type:Number,
-        min:15,
-        max:1000
+        min:0,
+        max:1000,
+        default:getRandomAge
     },
-    role:{
+    jobType:{
         type:String,
-        enum:['user','admin'],
-        default: 'user'
+        required:true,
+        default:"Unemployed"
     },
     company:{
         type:String,
         required:true,
-        default: getRandomCompany
+        default: () => getRandomCompany(companies)
     },
     bio:{
         type:String,
         default:"No Bio"
     },
-    sex:{
+    gender:{
         type:String,
-        required:[true, "Please pick a gender"]
+        required:[true, "Please pick a gender"],
+        default:randomGender
+    },
+    email:{
+        type:String,
+        required:true
+    },
+    role:{
+        type:String,
+        enum:['user','admin'],
+        default:"user"
     }
 
 },{timestamp:true})
