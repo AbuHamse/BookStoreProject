@@ -30,8 +30,8 @@ const getAllBooks = async (req, res) => {
 const getSingleBookById = async (req, res) => {
   try {
     const getCurrentBookID = req.params.id;
-    if(!mongoose.Types.ObjectId.isValid(getCurrentBookID)){
-      throw new Error('Invaild Mongoose ID.')
+    if (!mongoose.Types.ObjectId.isValid(getCurrentBookID)) {
+      throw new Error("Invaild Mongoose ID.");
     }
     const bookDetailsByID = await Books.findById(getCurrentBookID);
 
@@ -60,45 +60,65 @@ const createBook = async (req, res) => {
   try {
     const {
       title,
-      author,
+      author,        // can be _id or object { firstName, lastName }
       imageURL,
       genre,
       publisher,
       publishedDate,
       quantity,
       isbn,
-      isAvailable
+      isAvailable,
     } = req.body;
 
-    // ✅ Validate author ID format
-    if (!author) {
+    // ✅ Check request body
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ success: false, message: "Request body is empty" });
+    }
+
+    if (!title || !isbn || quantity == null || !author) {
       return res.status(400).json({
         success: false,
-        message: "Author is required",
+        message: "Missing required fields: title, author, isbn, or quantity",
       });
     }
 
-    // ✅ Check if author exists
-    const authorExists = await Author.findById(author);
+    let authorId;
 
-    if (!authorExists) {
-      return res.status(404).json({
-        success: false,
-        message: "Author not found",
+    // ✅ If author is a valid ObjectId, try finding by _id
+    if (typeof author === "string" && mongoose.Types.ObjectId.isValid(author)) {
+      const authorExists = await Author.findById(author);
+      if (!authorExists) {
+        return res.status(404).json({ success: false, message: "Author not found by _id" });
+      }
+      authorId = authorExists._id;
+    } 
+    // ✅ If author is an object with firstName/lastName, find by name
+    else if (typeof author === "object" && author.firstName) {
+      const authorExists = await Author.findOne({
+        firstName: author.firstName,
+        ...(author.lastName && { lastName: author.lastName }),
       });
+      if (!authorExists) {
+        return res.status(404).json({ success: false, message: "Author not found by name" });
+      }
+      authorId = authorExists._id;
+    } 
+    // ❌ Invalid author format
+    else {
+      return res.status(400).json({ success: false, message: "Invalid author format" });
     }
 
-    // ✅ Create book with controlled fields
+    // ✅ Create book
     const newBook = await Books.create({
       title,
-      author,
+      author: authorId,
       imageURL,
       genre,
       publisher,
       publishedDate,
       quantity,
       isbn,
-      isAvailable
+      isAvailable,
     });
 
     return res.status(201).json({
@@ -108,7 +128,6 @@ const createBook = async (req, res) => {
     });
 
   } catch (error) {
-    // duplicate key
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
@@ -116,20 +135,12 @@ const createBook = async (req, res) => {
       });
     }
 
-    // validation errors
     if (error.name === "ValidationError") {
-      return res.status(400).json({
-        success: false,
-        message: error.message,
-      });
+      return res.status(400).json({ success: false, message: error.message });
     }
 
     console.error("Error creating book:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Server Error Occurred",
-    });
+    return res.status(500).json({ success: false, message: "Server Error Occurred" });
   }
 };
 
