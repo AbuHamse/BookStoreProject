@@ -1,48 +1,50 @@
 import mongoose from "mongoose";
 
+const BookSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Author",
+      requried: true,
+    },
+    genere: {
+      type: String,
+      required: true,
+      default: "Classic",
+    },
+    publisher: {
+      type: String,
+      required: true,
+      default: "Space Books Inc.",
+    },
+    publishedDate: {
+      type: Date,
+      required: [true, "Published Date is required for Book"],
+      min: [new Date(1800, 0,1), "Year must be before 1000"],
+      max: [new Date(), "Year can't be from the future"],
+    },
 
-const BookSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
+    quantity: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    isbn: {
+      type: String,
+      required: true,
+      default: "x-xxxxx-xxxx-xxxx-x",
+    },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
   },
-  author:{
-    type:String,
-    requried:true
-  }
-  ,
+  { timestamp: true },
+);
 
-  genere: {
-    type: String,
-    required: true,
-    default: "",
-  },
-  publisher:{
-    type:String,
-    required:true,
-    default:"Space Books Inc.",
-  }
-  ,
-
-  publishedDate: {
-    type: Number,
-    required:[true,"Published Date is required for Book"],
-    min:[1000, "Year must be before 1000"],
-    max:[new Date().getFullYear(), "Year can't be from the future"]
-  },
-
-  quantity: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
-  
-  isAvailable:{
-    type:Boolean,
-    default:true
-  }
-},{timestamp:true});
-
-export default mongoose.model('Books',BookSchema)
+export default mongoose.model("Books", BookSchema);

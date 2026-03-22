@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import connectToDB from '../db/db.js';
+import connectToDB from './db.js';
 import Author from '../models/Author.js';
 import { faker } from '@faker-js/faker';
 
@@ -15,7 +15,7 @@ const seedDB = async () => {
 
         const authors = [];
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 50; i++) {
             // We generate the gender first to keep the names consistent
             const gender = faker.person.sex(); // returns 'male' or 'female'
 
