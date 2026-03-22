@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Author from '../models/Author.js'
 
 const BookSchema = new mongoose.Schema({
   title: {
