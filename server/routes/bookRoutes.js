@@ -4,7 +4,7 @@ import booksController from "../controllers/booksController.js";
 const {
   getAllBooks,
   getSingleBookById,
-  postSingleBookById,
+  createBook,
   editBookById,
   deleteBookById,
 } = booksController;
@@ -12,8 +12,8 @@ const {
 const router = express.Router();
 
 router.get("/", getAllBooks);
+router.post("/", createBook);
 router.get("/:id", getSingleBookById);
-router.post("/:id", postSingleBookById);
 router.put("/:id", editBookById);
 router.delete("/:id", deleteBookById);
 

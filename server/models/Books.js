@@ -12,10 +12,14 @@ const BookSchema = new mongoose.Schema(
       ref: "Author",
       requried: true,
     },
-    genere: {
+    imageURL:{
+      type:String,
+      default: "No Image",
+    }
+    ,
+    genre: {
       type: String,
       required: true,
-      default: "Classic",
     },
     publisher: {
       type: String,

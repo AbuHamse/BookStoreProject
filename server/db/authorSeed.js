@@ -37,7 +37,7 @@ const seedDB = async () => {
 
         // 2. Insert the array
         await Author.insertMany(authors);
-        console.log(`Successfully seeded 20 authors! 🌱`);
+        console.log(`Successfully seeded 50 authors! 🌱`);
 
         // 3. Close and Exit
         await mongoose.connection.close();

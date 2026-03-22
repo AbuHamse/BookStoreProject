@@ -33,6 +33,7 @@ const seedDB = async () => {
       books.push({
         title: faker.book.title(),
         author: randomAuthor._id,
+        imageURL:faker.image.url(),
         genre: faker.book.genre(), // ✅ fixed
         publisher: faker.book.publisher(),
         publishedDate: randomDate(), // ✅ fixed
