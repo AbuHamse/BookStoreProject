@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Author from '../models/Author.js'
+
 
 const BookSchema = new mongoose.Schema({
   title: {
@@ -9,17 +9,22 @@ const BookSchema = new mongoose.Schema({
     trim: true,
   },
   author:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:Author,
+    type:String,
     requried:true
   }
   ,
 
-  description: {
+  genere: {
     type: String,
     required: true,
     default: "",
   },
+  publisher:{
+    type:String,
+    required:true,
+    default:"Space Books Inc.",
+  }
+  ,
 
   publishedDate: {
     type: Number,

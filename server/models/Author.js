@@ -1,5 +1,22 @@
 import mongoose from 'mongoose'
 
+const companies = [
+    'Tile Books Inc', 
+    'MadeMan Books', 
+    'Tropical Books', 
+    'Galloway Books',
+    'Maser Books',
+    'Entitled Books',
+    'Lively Books',
+    'Scholastics Books',
+    'Rose and Larry Books'
+
+]
+
+function getRandomCompany(){
+            return companies[Math.floor(Math.random() * companies.length)]
+        }
+
 const AuthorSchema = mongoose.Schema({
     firstName:{
         type:String,
@@ -25,7 +42,21 @@ const AuthorSchema = mongoose.Schema({
         type:String,
         enum:['user','admin'],
         default: 'user'
+    },
+    company:{
+        type:String,
+        required:true,
+        default: getRandomCompany
+    },
+    bio:{
+        type:String,
+        default:"No Bio"
+    },
+    sex:{
+        type:String,
+        required:[true, "Please pick a gender"]
     }
+
 },{timestamp:true})
 
 export default mongoose.model('Author',AuthorSchema)
