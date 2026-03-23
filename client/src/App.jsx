@@ -1,11 +1,8 @@
-import React from 'react'
-import {Button} from 'primereact/button'
+import AppRoute from './routes/AppRoutes'
 
 const App = () => {
   return (
-    <div className='text-5xl'>App
-    <Button label='Click Me'/>
-    </div>
+    <AppRoute/>
   )
 }
 
