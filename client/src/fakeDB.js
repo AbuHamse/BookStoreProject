@@ -1,4 +1,4 @@
-const featuredBooks = [
+const _featuredBooks = [
   {
     id: 1,
     title: "The Midnight Library",
@@ -29,7 +29,7 @@ const featuredBooks = [
   },
 ];
 
-const categories = [
+const _categories = [
   { name: "Fiction", count: 1250 },
   { name: "Non-Fiction", count: 890 },
   { name: "Science Fiction", count: 456 },

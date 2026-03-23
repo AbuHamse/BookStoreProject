@@ -9,10 +9,10 @@ const PORT = process.env.PORT || 3000
 /*Connecting to DB */
 connectToDB()
 
-// ✅ Parse JSON bodies
+
 app.use(express.json());
 
-// ✅ Optional: parse URL-encoded bodies (if needed)
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/books/', bookRoutes)

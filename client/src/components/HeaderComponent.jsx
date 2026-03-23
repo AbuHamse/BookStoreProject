@@ -1,20 +1,21 @@
-import React from "react";
+import { FC, useMemo } from "react";
 import { Menubar } from "primereact/menubar";
 import { useNavigate } from "react-router-dom";
+
 
 const HeaderComponent = () => {
   const navigate = useNavigate();
 
-  const items = [
+  const items = useMemo(() => [
     {
       label: "Home",
       icon: "pi pi-home",
       command: () => navigate("/"),
     },
     {
-      label: "Books",
+      label: "About",
       icon: "pi pi-book",
-      command: () => navigate("/books"),
+      command: () => navigate("/about"),
     },
     {
       label: "Categories",
@@ -35,20 +36,18 @@ const HeaderComponent = () => {
       ],
     },
     {
-      label: "Add Book",
-      icon: "pi pi-plus",
-      command: () => navigate("/add-book"),
-    },
-    {
       label: "Contact",
       icon: "pi pi-envelope",
-      command: () => navigate("/contact"),
+      command: () => navigate("/login"),
     },
-  ];
+  ], [navigate]);
 
   const start = (
-    <h2 style={{ margin: 0, cursor: "pointer" }} onClick={() => navigate("/")}>
-      📚 BookStore
+    <h2
+      className="m-0 cursor-pointer text-xl font-bold"
+      onClick={() => navigate("/")}
+    >
+      📚 BOOKSTORE APP
     </h2>
   );
 
