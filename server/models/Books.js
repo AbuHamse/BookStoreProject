@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const BookSchema = new mongoose.Schema(
   {
     title: {
@@ -7,6 +8,11 @@ const BookSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+     bookID:{
+        type:Number,
+        required:true
+      }
+    ,
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Author",

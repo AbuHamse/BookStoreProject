@@ -9,7 +9,7 @@ const connectToDB = async()=>{
         await mongoose.connect(MONGO_URI)
         console.log("Mongo DB successfully running")
     } catch (error) {
-        console.error("MongoDB not connected, please make sure URI is correct.")
+        console.error("MongoDB not connected, please make sure URI is correct.", error.stack)
         process.exit(1)
         
     }
