@@ -1,12 +1,13 @@
 import cors from 'cors'
-import APIErrorHandler from '../middleware/errorHandlerClass'
+import APIErrorHandler from '../middleware/errorHandlerClass.js'
 
 const configureCors = () =>{
     return cors({
         origin:(origin,callback) =>{
             const allowedOrigins = [
-                "http://localhost:3000",
-                "http://localhost:6000"
+                "http://localhost:3222",
+                "http://localhost:5173",
+                "http://localhost:3000"
             ]
 
             if(!origin || allowedOrigins.indexOf(origin) !== -1 ){

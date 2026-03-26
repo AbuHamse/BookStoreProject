@@ -5,6 +5,8 @@ import bookRoutes from './routes/bookRoutes.js'
 import authorRoutes from './routes/authorRoutes.js'
 import cors from 'cors'
 import globalErrorHandler from './middleware/globalErrorHandler.js'
+import configureCors from './config/corsConfig.js'
+import createRateLimiter from './middleware/rateLimiterHandler.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -12,7 +14,8 @@ const PORT = process.env.PORT || 3000
 /*Connecting to DB */
 connectToDB()
 
-app.use(cors())
+app.use(configureCors())
+app.use(createRateLimiter(100, 6000))
 
 
 app.use(express.json());
