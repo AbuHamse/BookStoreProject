@@ -36,7 +36,7 @@ const HeaderComponent = () => {
             Genre <FiChevronDown />
             <div className="absolute top-full left-0 w-48 bg-white shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all mt-2 p-2">
               <button onClick={() => navigate("/books?category=fiction")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Fiction</button>
-              <button onClick={() => navigate("/books?category=scifi")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Sci-Fi</button>
+              <button onClick={() => navigate("/books?category=scifi")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Non-Fiction</button>
             </div>
           </div>
 
