@@ -1,8 +1,14 @@
 import React from 'react'
+import AboutSectionComponent from '../components/AboutSectionComponet'
+import AboutMissionComponent from '../components/AboutMissionComponent'
 
 const AboutPage = () => {
   return (
-    <div>AboutPage</div>
+    <div className='w-full min-h-screen'>
+      
+      <AboutSectionComponent/>
+      <AboutMissionComponent/>
+      </div>
   )
 }
 

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+.heroSection{
+
+    @apply max-w-7xl min-h-lvh m-auto mt-2
+}
+
+
 .footer-link {
   @apply text-sm text-slate-500 cursor-pointer transition duration-200;
 }
