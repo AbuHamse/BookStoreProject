@@ -4,6 +4,7 @@ import connectToDB from './db/db.js'
 import bookRoutes from './routes/bookRoutes.js'
 import authorRoutes from './routes/authorRoutes.js'
 import cors from 'cors'
+import globalErrorHandler from './middleware/globalErrorHandler.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -21,6 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/books/', bookRoutes)
 app.use('/api/authors/', authorRoutes)
+
+
+app.use(globalErrorHandler)
 
 app.listen(PORT,()=>{
     
