@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+.footer-link {
+  @apply text-sm text-slate-500 cursor-pointer transition duration-200;
+}
+
+.footer-link:hover {
+  @apply text-[#8FA7BB] translate-x-1;
+}
+
+.footer-icon {
+  @apply text-xs text-slate-400 border border-slate-300 px-2 py-1 rounded cursor-pointer transition;
+}
+
+.footer-icon:hover {
+  @apply text-[#7D9AB3] border-[#7D9AB3] scale-110;
+}

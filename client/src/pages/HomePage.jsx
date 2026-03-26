@@ -1,8 +1,13 @@
 import React from 'react'
+import HeroComponent from '../components/HeroComponent'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div className='w-full min-h-screen mt-3'>
+      
+     <HeroComponent/>
+      
+      </div>
   )
 }
 
