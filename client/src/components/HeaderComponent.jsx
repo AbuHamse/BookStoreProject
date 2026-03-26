@@ -35,8 +35,8 @@ const HeaderComponent = () => {
           <div className="group relative cursor-pointer flex items-center gap-1 text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-[#7D9AB3]">
             Genre <FiChevronDown />
             <div className="absolute top-full left-0 w-48 bg-white shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all mt-2 p-2">
-              <button onClick={() => navigate("/books?category=fiction")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Fiction</button>
-              <button onClick={() => navigate("/books?category=scifi")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Non-Fiction</button>
+              <button onClick={() => navigate("/genre/fiction")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Fiction</button>
+              <button onClick={() => navigate("/genre/non-fiction")} className="w-full text-left px-4 py-2 hover:bg-[#F3F5F8] text-xs uppercase font-bold text-slate-500">Non-Fiction</button>
             </div>
           </div>
 
