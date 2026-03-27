@@ -10,7 +10,7 @@ const configureCors = () =>{
                 "http://localhost:3000"
             ]
 
-            if(!origin || allowedOrigins.indexOf(origin) !== -1 ){
+            if(!origin || allowedOrigins.includes(origin)){
                 callback(null, true)
             }else{
                 callback(new APIErrorHandler("Not Allowed by CORS", 403 ));
