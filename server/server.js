@@ -1,11 +1,16 @@
-import express from 'express'
 import 'dotenv/config'
+import express from 'express'
+import cors from 'cors'
+
 import connectToDB from './db/db.js'
+
 import bookRoutes from './routes/bookRoutes.js'
 import authorRoutes from './routes/authorRoutes.js'
-import cors from 'cors'
-import globalErrorHandler from './middleware/globalErrorHandler.js'
+import userRoutes from './routes/userRoutes.js'
+
 import configureCors from './config/corsConfig.js'
+
+import globalErrorHandler from './middleware/globalErrorHandler.js'
 import createRateLimiter from './middleware/rateLimiterHandler.js'
 import requestLogger from './middleware/requestLogger.js'
 
@@ -29,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/books/', bookRoutes)
 app.use('/api/authors/', authorRoutes)
+app.use('/api/user/', userRoutes)
 
 
 app.use(globalErrorHandler)

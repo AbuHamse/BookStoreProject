@@ -23,6 +23,13 @@ const globalErrorHandler = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
+    if (err.name === 'TokenExpiredError') {
+        err = new APIErrorHandler('Your session has expired. Please log in again.', 401);
+    }
+    if (err.name === 'JsonWebTokenError') {
+        err = new APIErrorHandler('Invalid token. Please log in again.', 401);
+    }
+
     if (process.env.NODE_ENV === 'development') {
         // In Dev: Give me all the info!
         res.status(err.statusCode).json({

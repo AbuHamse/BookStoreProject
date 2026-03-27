@@ -1,8 +1,10 @@
 import express from 'express'
-import registerController from '../controllers/userController'
+import { registerController, loginController } from '../controllers/userController.js'
 
 const router = express.Router()
 
-router.get('/', (res,req)=>{
-    console.log(res.statusCode(200).send("New"))
-})
+router.get('/register', registerController)
+
+router.post('/login', loginController)
+
+export default router

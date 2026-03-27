@@ -1,103 +1,60 @@
-import User from "../models/User";
+import User from "../models/User.js";
 import bcyrpt from "bcrypt";
 import jwt from "jsonwebtoken";
-import APIErrorHandler from "./errorHandlerClass";
-import 'dotenv/config'
+import APIErrorHandler from "../middleware/errorHandlerClass.js";
+import asyncHandler from "../utils/asyncFunctionalHandler.js"
 
-const registerController = async (req, res) => {
-  try {
+export const registerController = asyncHandler(async (req, res, next) => {
     const { firstName, lastName, username, email, password, role } = req.body;
 
-    const checkingUser = await User.findOne({
-      $or: [{ username }, { email }],
-    });
-
-    if (!checkingUser) {
-      return res.status(404).json({
-        success: false,
-        message: new APIErrorHandler("User or Email already exists,", 404),
-      });
+    // 1. Check if user exists (Logic flipped to correct way)
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+        return next(new APIErrorHandler("Username or Email already exists", 400));
     }
 
+    // 2. Hash Password
     const salt = await bcyrpt.genSalt(10);
     const hashPassword = await bcyrpt.hash(password, salt);
 
+    // 3. Create User
     const newUser = await User.create({
-      firstName,
-      lastName,
-      username,
-      password: hashPassword,
-      email,
-      role: role || "user",
+        firstName,
+        lastName,
+        username,
+        email,
+        password: hashPassword,
+        role: role || "user",
     });
 
-    await newUser.save();
+    res.status(201).json({ 
+        success: true, 
+        message: "User created Successfully" 
+    });
+});
 
-    if (!newUser) {
-      return new APIErrorHandler("Invail Credentials", 404);
-    } else {
-      res
-        .status(201)
-        .json({ success: true, message: "User created Successfully" });
+export const loginController = asyncHandler(async (req, res, next) => {
+    const { username, email, password } = req.body;
+
+    // 1. Find User
+    const user = await User.findOne({ $or: [{ username }, { email }] });
+    if (!user) {
+        return next(new APIErrorHandler("Invalid credentials", 401));
     }
-  } catch (error) {
-    console.error(error.stack);
-    res
-      .status(503)
-      .json({
-        success: false,
-        message: new APIErrorHandler(
-          "Unsuccessful creating user. Please try again",
-          503,
-        ),
-      });
-  }
-};
 
-const loginController = async (req, res) => {
- try {
-     const { username, email, password } = req.body;
+    // 2. Compare Password
+    const isPasswordMatch = await bcyrpt.compare(password, user.password);
+    if (!isPasswordMatch) {
+        return next(new APIErrorHandler("Invalid credentials", 401));
+    }
 
-  const user = await User.findOne({
-    $or: [{ username }, { email }],
-  });
+    // 3. Generate Token
+    const jwtObject = { userId: user._id, username: user.username, role: user.role };
+    const accessToken = jwt.sign(jwtObject, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-  if (!user) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Invaild User, Not Found", data: user });
-  }
-
-  const isPasswordMatch = await bcyrpt.compare(password, user.password);
-
-  if(!isPasswordMatch){
-    return res
-    .status(400)
-    .json({success:false, message:"Password is Wrong. Invaild Credential."})
-  }
-
-  const jwtObject = {
-    userId: user._id,
-    username: user.username,
-    role:user.role
-  }
-
-  const JWT_KEY = process.env.JWT_KEY
-
-  const accessToken = jwt.sign(jwtObject,JWT_KEY, {expiresIn:"1h"})
-  
-  res.status(200).json({
-    success:true,
-    message:"Access Token Granted.",
-    data:accessToken
-  })
-
- } catch (error) {
-    return res.status(500).json({succsss:false,message:"Invaild Access Token. Access Denied"})
- }
-  
-
-
-};
-
-export default {registerController, loginController};
+    res.status(200).json({
+        success: true,
+        message: "Login successful",
+        accessToken // Send it back clearly
+    });
+});

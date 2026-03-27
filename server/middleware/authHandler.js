@@ -1,44 +1,36 @@
 import jwt from "jsonwebtoken";
+import APIErrorHandler from "./errorHandlerClass.js";
+import asyncHandler from "../utils/callBackFuctionalHandler.js";
 
-const authHandler = async (req, res, next) => {
-  const authHeader = req.headers["Authorization"];
-  console.log(authHeader);
-
+const authHandler = asyncHandler(async (req, res, next) => {
+  // 1. Get the header
+  const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
+  // 2. No token? Throw to the global handler
   if (!token) {
-    return res
-      .status(403)
-      .json({ success: false, message: "Access Denied. Invaild Credentials" });
-  }
-  if (!token) {
-    return res.status(401).json({
-      success: false,
-      message: "Access denied. No token provided. Please login to continue",
-    });
+    return next(
+      new APIErrorHandler("Authentication required. Please log in.", 401),
+    );
   }
 
-  try {
-    const decodedTokenInfo = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (decodedTokenInfo) {
-      return res
-        .status(200)
-        .json({
-          success: false,
-          message: "Success. Access Granted",
-          data: decodedTokenInfo,
-        });
-    }
+  // 3. Verify Token
+  // If this fails, the error is caught by asyncHandler and sent to globalErrorHandler
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.userInfo = decodedTokenInfo;
-    next();
-  } catch (error) {
-    console.error(error.stack);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Access Denied. Something went wrong.",
-      });
+  // Now you can safely use 'await' because of the asyncHandler!
+  const userStillExists = await User.findById(decoded.userId);
+
+  if (!userStillExists) {
+    return next(new APIErrorHandler("This user no longer exists.", 401));
   }
-};
+
+
+  // 4. Attach user to request
+  req.user = decoded;
+
+  // 5. Move to the next middleware or controller
+  next();
+});
+
+export default authHandler;
