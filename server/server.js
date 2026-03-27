@@ -13,6 +13,7 @@ import configureCors from './config/corsConfig.js'
 import globalErrorHandler from './middleware/globalErrorHandler.js'
 import createRateLimiter from './middleware/rateLimiterHandler.js'
 import requestLogger from './middleware/requestLogger.js'
+import { primaryApiVersioningHandler } from './middleware/apiVersioningHandler.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -32,9 +33,11 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/books/', bookRoutes)
-app.use('/api/authors/', authorRoutes)
-app.use('/api/user/', userRoutes)
+app.use('/api',primaryApiVersioningHandler("v1"))
+
+app.use('/api/v1/books/', bookRoutes)
+app.use('/api/v1/authors/', authorRoutes)
+app.use('/api/v1/user/', userRoutes)
 
 
 app.use(globalErrorHandler)
