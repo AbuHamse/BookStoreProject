@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../models/User.js";s
 import bcyrpt from "bcrypt";
 import jwt from "jsonwebtoken";
 import APIErrorHandler from "../middleware/errorHandlerClass.js";
