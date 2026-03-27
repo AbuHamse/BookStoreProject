@@ -7,12 +7,16 @@ import cors from 'cors'
 import globalErrorHandler from './middleware/globalErrorHandler.js'
 import configureCors from './config/corsConfig.js'
 import createRateLimiter from './middleware/rateLimiterHandler.js'
+import requestLogger from './middleware/requestLogger.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
+
 /*Connecting to DB */
 connectToDB()
+
+app.use(requestLogger)
 
 app.use(configureCors())
 app.use(createRateLimiter(100, 6000))
