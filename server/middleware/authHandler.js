@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import APIErrorHandler from "./errorHandlerClass.js";
-import asyncHandler from "../utils/callBackFuctionalHandler.js";
+import asyncHandler from '../utils/asyncFunctionalHandler.js'
 
 const authHandler = asyncHandler(async (req, res, next) => {
   // 1. Get the header

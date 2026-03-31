@@ -7,6 +7,7 @@ import connectToDB from './db/db.js'
 import bookRoutes from './routes/bookRoutes.js'
 import authorRoutes from './routes/authorRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import authRoutes from './routes/authRoutes.js'
 
 import configureCors from './config/corsConfig.js'
 
@@ -28,16 +29,18 @@ app.use(configureCors())
 app.use(createRateLimiter(100, 6000))
 
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: '10mb' ,extended: true }));
 
-app.use('/api',primaryApiVersioningHandler("v1"))
+app.use(primaryApiVersioningHandler("v1"))
 
-app.use('/api/v1/books/', bookRoutes)
-app.use('/api/v1/authors/', authorRoutes)
-app.use('/api/v1/user/', userRoutes)
+
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/books', bookRoutes)
+app.use('/api/v1/authors', authorRoutes)
+app.use('/api/v1/users', userRoutes)
 
 
 app.use(globalErrorHandler)
