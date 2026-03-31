@@ -1,13 +1,15 @@
 import jwt from "jsonwebtoken";
 import APIErrorHandler from "./errorHandlerClass.js";
-import asyncHandler from '../utils/asyncFunctionalHandler.js'
+import asyncHandler from '../utils/asyncFunctionalHandler.js';
+// CRITICAL: You must import your User model!
+import User from "../models/User.js"; 
 
 const authHandler = asyncHandler(async (req, res, next) => {
   // 1. Get the header
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  // 2. No token? Throw to the global handler
+  // 2. No token?
   if (!token) {
     return next(
       new APIErrorHandler("Authentication required. Please log in.", 401),
@@ -15,21 +17,22 @@ const authHandler = asyncHandler(async (req, res, next) => {
   }
 
   // 3. Verify Token
-  // If this fails, the error is caught by asyncHandler and sent to globalErrorHandler
+  // If jwt.verify fails (expired or fake), asyncHandler catches it
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  // Now you can safely use 'await' because of the asyncHandler!
+  // 4. Check if user still exists in DB
   const userStillExists = await User.findById(decoded.userId);
 
   if (!userStillExists) {
     return next(new APIErrorHandler("This user no longer exists.", 401));
   }
 
+  // 5. Attach user to request
+  // TIP: Attach the actual DB user object so your controllers 
+  // don't have to query the database again!
+  req.user = userStillExists;
 
-  // 4. Attach user to request
-  req.user = decoded;
-
-  // 5. Move to the next middleware or controller
+  // 6. Move to the next middleware or controller
   next();
 });
 

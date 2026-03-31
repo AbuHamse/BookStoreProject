@@ -1,32 +1,34 @@
 import User from "../models/User.js";
-
 import APIErrorHandler from "../middleware/errorHandlerClass.js";
-import asyncHandler from "../utils/asyncFunctionalHandler.js"
-
+import asyncHandler from "../utils/asyncFunctionalHandler.js";
 
 // 1. Get User Profile
-// This runs AFTER your authHandler has verified the token
 export const getUserProfile = asyncHandler(async (req, res, next) => {
-    // req.user was set by your authHandler (it contains the userId)
-    const user = await User.findById(req.user.userId).select("-password"); // "-password" hides the hash from the frontend
+    // req.user was set by authHandler as the full user object
+    // We just need to make sure we don't send the password back
+    const user = req.user;
 
     if (!user) {
         return next(new APIErrorHandler("User not found", 404));
     }
 
+    // Convert to object and remove password if it's there
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
     res.status(200).json({
         success: true,
-        data: user
+        data: userResponse // This is what UserProfilePage.jsx is waiting for!
     });
 });
 
 // 2. Update User Profile
 export const updateUserProfile = asyncHandler(async (req, res, next) => {
-    // We only want to allow updates to specific fields
     const { firstName, lastName, bio, profilePictue, avatarPicture } = req.body;
 
+    // Use req.user._id (Mongoose default) or req.user.id
     const updatedUser = await User.findByIdAndUpdate(
-        req.user.userId,
+        req.user._id, 
         { 
             firstName, 
             lastName, 
@@ -35,8 +37,8 @@ export const updateUserProfile = asyncHandler(async (req, res, next) => {
             avatarPicture 
         },
         { 
-            new: true, // Returns the fresh updated document
-            runValidators: true // Ensures the new data follows your Schema rules
+            new: true, 
+            runValidators: true 
         }
     ).select("-password");
 
