@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "seed:db": "node ./db/authorSeed.js",
-    "bookseed:db": "node ./db/bookSeed.js"
+    "authorseed:db": "node ./db/authorSeed.js",
+    "bookseed:db": "node ./db/bookSeed.js",
+    "userseed:db": "node ./db/userSeed.js"
   },
   "keywords": [],
   "author": "",

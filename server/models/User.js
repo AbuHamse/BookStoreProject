@@ -1,19 +1,31 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema({
-    firstName:{
-        type:String,
-        required:true,
-        trim:true
+const UserSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-
-    lastName:{
-        type:String,
-        required:true,
-        trim:true
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-
-     username: {
+    // Fixed typo and added a default placeholder
+    profilePicture: {
+      type: String,
+      default: "https://via.placeholder.com/150", 
+      trim: true,
+    },
+    // Changed required to false so users can sign up quickly
+    bio: {
+      type: String,
+      required: false,
+      trim: true,
+      default: "",
+    },
+    username: {
       type: String,
       required: true,
       unique: true,
@@ -25,17 +37,22 @@ const UserSchema = new mongoose.Schema({
       unique: true,
       trim: true,
       lowercase: true,
+      // Simple regex for email validation
+      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'],
     },
     password: {
       type: String,
       required: true,
+      minlength: 3, // Basic security constraint
     },
     role: {
       type: String,
-      enum: ["user", "admin"], // only allow 'user' or 'admin' roles
+      enum: ["user", "admin"],
       default: "user",
-    }
+    },
+  },
+  { timestamps: true }
+);
 
-},{timestamps:true})
-
-export default mongoose.model('Users', UserSchema)
+// Exporting as "User" (Singular)
+export default mongoose.model("User", UserSchema);

@@ -18,6 +18,7 @@ import NotFound from '../pages/NotFoundPage'
 // User Pages (Make sure to create these files in your pages folder!)
 import BooksPage from '../pages/BooksPage'
 import AuthorsPage from '../pages/AuthorsPage'
+import UserProfilePage from '../pages/UserProfilePage'
 
 
 const AppRoutes = () => {
@@ -37,6 +38,7 @@ const AppRoutes = () => {
 
       {/* 2. Authenticated User Routes - Uses UserHeaderComponent */}
       <Route element={<UserLayout />}>
+        <Route path='/users' element={<UserProfilePage />} />
         <Route path='/books' element={<BooksPage />} />
         <Route path='/authors' element={<AuthorsPage />} />
        

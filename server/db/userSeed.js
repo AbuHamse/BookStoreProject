@@ -1,32 +1,32 @@
-import 'dotenv/config';
+import 'dotenv/config'
 import mongoose from 'mongoose';
 import connectToDB from './db.js';
-import Author from '../models/Author.js';
+import Users from '../models/User.js';
 import { faker } from '@faker-js/faker';
 
-const authorSeedDB = async () => {
+const userSeedDB = async () => {
     try {
         await connectToDB();
         console.log('Connected to MongoDB... 🚀');
 
         // 1. Wipe current data
-        await Author.deleteMany({});
-        console.log('Old authors removed.');
+        await Users.deleteMany({});
+        console.log('Old Users removed.');
 
-        const authors = [];
+        const users = [];
 
-        for (let i = 0; i < 50; i++) {
-            // We generate the gender first to keep the names consistent
-            const gender = faker.person.sex(); // returns 'male' or 'female'
-
-            authors.push({
+        for (let i = 0; i < 30; i++) {
+        
+            users.push({
                 // We use padEnd to ensure we hit the 4-character minlength requirement
-                firstName: faker.person.firstName(gender).padEnd(4, 'x'),
+                firstName: faker.person.firstName().padEnd(4, 'x'),
                 lastName: faker.person.lastName().padEnd(4, 'x'),
-                jobType: faker.person.jobType(),
+                avatarPicture: faker.image.avatar(),
+                profilePicture: faker.image.url(),
                 bio: faker.person.bio(),
+                username: faker.internet.username(),
                 email: faker.internet.email(),
-                gender: gender, 
+                password: faker.location.country(), 
                 role: faker.helpers.arrayElement(['user', 'admin']),
                 
                 // Note: We ARE NOT providing age or company here.
@@ -36,8 +36,8 @@ const authorSeedDB = async () => {
         }
 
         // 2. Insert the array
-        await Author.insertMany(authors);
-        console.log(`Successfully seeded 50 authors! 🌱`);
+        await Users.insertMany(users);
+        console.log(`Successfully seeded ${users.length} users! 🌱`);
 
         // 3. Close and Exit
         await mongoose.connection.close();
@@ -49,4 +49,4 @@ const authorSeedDB = async () => {
     }
 };
 
-authorSeedDB();
+userSeedDB();
