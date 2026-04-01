@@ -24,6 +24,7 @@ const authorSeedDB = async () => {
                 firstName: faker.person.firstName(gender).padEnd(4, 'x'),
                 lastName: faker.person.lastName().padEnd(4, 'x'),
                 jobType: faker.person.jobType(),
+                profilePicture: faker.image.url(),
                 bio: faker.person.bio(),
                 email: faker.internet.email(),
                 gender: gender, 

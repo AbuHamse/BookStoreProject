@@ -25,6 +25,10 @@ export function generateQuantity() {
   return Math.floor(Math.random() * 50);
 }
 
+export function generateRatings() {
+  return Math.floor(Math.random() * 5);
+}
+
 export async function syncSchema(model){
     try {
        await model.syncIndexes()

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { getRandomAge,getRandomCompany, randomGender } from '../utils/utils.js'
+import { generateRatings, getRandomAge,getRandomCompany, randomGender } from '../utils/utils.js'
 
 const companies = [
     'Tile Books Inc', 
@@ -44,6 +44,11 @@ const AuthorSchema = mongoose.Schema({
         required:true,
         default:"Unemployed"
     },
+      profilePicture:{
+        type:String,
+        required:true,
+        
+    },
     company:{
         type:String,
         required:true,
@@ -61,6 +66,10 @@ const AuthorSchema = mongoose.Schema({
     email:{
         type:String,
         required:true
+    },
+      rating:{
+        type:Number,
+        default:generateRatings
     },
     role:{
         type:String,

@@ -1,14 +1,22 @@
-// In routes/userRoutes.js
 import express from 'express';
-import {getUserProfile, updateUserProfile} from '../controllers/userController.js'
+import { 
+    getAllUsers, 
+    getUserById, 
+    getUserProfile, 
+    updateUserProfile 
+} from '../controllers/userController.js';
 import authHandler from '../middleware/authHandler.js';
 
 const router = express.Router();
 
-// This makes the full path: GET /api/v1/users/profile
-router.get('/profile', authHandler, getUserProfile);
+// Public/Admin route to see everyone
+router.get('/', authHandler, getAllUsers);
 
-// This makes the full path: PUT /api/v1/users/profile
+// Your existing private profile routes
+router.get('/profile', authHandler, getUserProfile);
 router.put('/profile', authHandler, updateUserProfile);
+
+// Specific user lookup
+router.get('/:id', authHandler, getUserById);
 
 export default router;

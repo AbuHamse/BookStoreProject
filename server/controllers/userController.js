@@ -2,6 +2,32 @@ import User from "../models/User.js";
 import APIErrorHandler from "../middleware/errorHandlerClass.js";
 import asyncHandler from "../utils/asyncFunctionalHandler.js";
 
+
+// --- NEW: Get All Users ---
+export const getAllUsers = asyncHandler(async (req, res, next) => {
+    const users = await User.find().select("-password");
+    
+    res.status(200).json({
+        success: true,
+        count: users.length,
+        data: users
+    });
+});
+
+// --- NEW: Get Specific User by ID ---
+export const getUserById = asyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id).select("-password");
+
+    if (!user) {
+        return next(new APIErrorHandler("User not found with that ID", 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        data: user
+    });
+});
+
 // 1. Get User Profile
 export const getUserProfile = asyncHandler(async (req, res, next) => {
     // req.user was set by authHandler as the full user object
