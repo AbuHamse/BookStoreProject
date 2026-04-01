@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt'
 
 const UserSchema = new mongoose.Schema(
   {
@@ -57,6 +58,27 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+// --- THE FIX: PASSWORD HASHING MIDDLEWARE ---
+UserSchema.pre('save', async function(next) {
+    // Only hash the password if it's new or being modified
+    if (!this.isModified('password')) return next();
+
+    try {
+        // Generate a salt (extra security layer)
+        const salt = await bcrypt.genSalt(10);
+        // Hash the password with the salt
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Method to check password during login
+UserSchema.methods.comparePassword = async function(candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password);
+};
 
 // Exporting as "User" (Singular)
 export default mongoose.model("User", UserSchema);

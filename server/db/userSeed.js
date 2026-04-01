@@ -16,22 +16,27 @@ const userSeedDB = async () => {
         const users = [];
 
         for (let i = 0; i < 30; i++) {
-        
+            const username = faker.internet.username(); // Generate once to use as a seed
+
             users.push({
-                // We use padEnd to ensure we hit the 4-character minlength requirement
                 firstName: faker.person.firstName().padEnd(4, 'x'),
                 lastName: faker.person.lastName().padEnd(4, 'x'),
-                avatarPicture: faker.image.avatar(),
-                profilePicture: faker.image.url(),
+                
+                // --- FIXED IMAGE LINKS ---
+                // 1. FREE AVATAR: Using DiceBear (Stable & Fast)
+                avatarPicture: `https://api.dicebear.com/7.x/notionists/svg?seed=${username}`,
+                
+                // 2. FREE PROFILE PIC: Using Picsum (High-res photography)
+                profilePicture: `https://picsum.photos/seed/${username}${i}/800/600`,
+                // -------------------------
+
                 bio: faker.person.bio(),
-                username: faker.internet.username(),
+                username: username,
                 email: faker.internet.email(),
                 password: faker.location.country(), 
                 role: faker.helpers.arrayElement(['user', 'admin']),
                 
-                // Note: We ARE NOT providing age or company here.
-                // Mongoose will automatically call getRandomAge and getRandomCompany
-                // because they are defined as defaults in your schema.
+                // Age and Company handled by your Mongoose defaults!
             });
         }
 
